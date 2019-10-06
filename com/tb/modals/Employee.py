@@ -20,3 +20,15 @@ class Employee (object):
             self.contact,
             self.salary
         )
+
+    def __repr__(self):
+        return "{},{},{},{},{},{},{}".format(
+            self.Id,
+            self.name,
+            self.email,
+            self.age,
+            self.contact,
+            self.salary,
+            self.projects,
+            '\n'
+        )

@@ -1,6 +1,10 @@
 from com.tb.modals.Employee import Employee
+from com.tb.utils.readutils import ReadUtils
+from com.tb.utils.fileutils import FileUtils
+
 class EmployeeService:
     employees = list()
+    fileLocation='d:\\aaa.csv'
 
     def menu(self):
         print('---MAIN MENU---')
@@ -14,17 +18,20 @@ class EmployeeService:
     def saveData(self):
         pass
     def __init__(self):
-        # to load data from file ad populate employees list thiss has to be called everytime
-        pass
+        self.rUtils =  ReadUtils()
+        self.fUtils= FileUtils()
+        self.employees= self.fUtils.readFile(self.fileLocation)
 
     def addEmployee(self):
-        emp = Employee(name=input('Enter the name'),
-                       contact=input('Enter the contact number'),
-                    age=int(input("Enter the age")),
-                        email=input('Enter the Email address'),
-                        salary=input('Enter the salary'),
-                        project=list(input('Please enter  the project'))
-                    )
+
+        emp = Employee(
+            name=self.rUtils.readString('Enter the name in String ','Could not resolve input as String'),
+            contact=self.rUtils.readPhone('Enter the Contact Number in Numeric ','Could not resolve input as numberic'),
+            age=int(input("Enter the age")),
+            email=input('Enter the Email address'),
+            salary=input('Enter the salary'),
+            project=list(input('Please enter  the project'))
+            )
         self.employees.append(emp)
 
     def showAllEmployee(self):
@@ -37,14 +44,21 @@ class EmployeeService:
             if str(emp.name).lower() == empName.lower():
                 print(emp)
 
-    def showEmployeeBySalary(self):
-        pass
-
     def processEmployee(self, case):
         switcher = {
             1: self.addEmployee,
             2: self.showAllEmployee,
             3: self.showEmployeeByName,
-            4: self.showEmployeeBySalary
+            4: self.showEmployeeBySalary,
+            5: self.saveToFile
         }
         return switcher.get(case, 'Can not process request as does not exist')
+
+    def showEmployeeBySalary(self):
+        pass
+
+    def saveToFile(self):
+        for emp in self.employees:
+            status=self.fUtils.saveToFile(self.fileLocation,emp)
+        print(status)
+
