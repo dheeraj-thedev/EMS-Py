@@ -1,7 +1,7 @@
 from com.tb.modals.Employee import Employee
 from com.tb.utils.readutils import ReadUtils
 from com.tb.utils.fileutils import FileUtils
-
+from com.tb.services.EmailServicesGoogle import GmailMailer
 class EmployeeService:
     employees = list()
     fileLocation='d:\\aaa.csv'
@@ -14,24 +14,24 @@ class EmployeeService:
         print('4. To Search Employee by project')
         print('5. To save to csv')
         print('5. max Salary')
-
     def saveData(self):
         pass
+
     def __init__(self):
         self.rUtils =  ReadUtils()
         self.fUtils= FileUtils()
         self.employees= self.fUtils.readFile(self.fileLocation)
 
     def addEmployee(self):
-
         emp = Employee(
             name=self.rUtils.readString('Enter the name in String ','Could not resolve input as String'),
             contact=self.rUtils.readPhone('Enter the Contact Number in Numeric ','Could not resolve input as numberic'),
             age=int(input("Enter the age")),
             email=input('Enter the Email address'),
             salary=input('Enter the salary'),
-            project=list(input('Please enter  the project'))
+            project=self.rUtils.readProjects('Emter the project details ',"could not read  those")
             )
+        GmailMailer().sendMail(emailAddress=emp.email,subject='Email Notification of '+str(emp.tempID),body=emp.__str__())
         self.employees.append(emp)
 
     def showAllEmployee(self):
